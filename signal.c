@@ -1,19 +1,23 @@
-#include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 static void sighandler(int signo){
   if (signo == SIGINT){
-    printf("I’ve been interrupted, how rude!\n");
+    printf("I’ve been interrupted by SIGINT signal how rude!\n");
     exit(1);
   }
   if(signo == SIGUSR1){
-    printf("pid: %d", getppid());
+    printf("parent pid: %d", getppid());
   }
 }
  int main(){
-   while(1 == 1){
-     signal(SIGINT, sighandler);
-     printf("%d\n",getpid());
+   signal(SIGINT, sighandler);
+   signal(SIGUSR1,sighandler);
+   while(1){
+     printf("Pid # is: %d\n",getpid());
      sleep(1);
    }
  }
